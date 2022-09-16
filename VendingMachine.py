@@ -1,3 +1,7 @@
+balance = 0
+history = {}
+inventory = {}
+
 # Show the balance
 def balance():
 
@@ -28,11 +32,37 @@ def buy_item(name, dollars, quarters, dimes, nickles, pennies):
 
 # Displays help menu with these commands.
 def help():
-
+    print("""Available commands:
+    help - display this text
+    balance - show your balance
+    inventory - show iventory of items available
+    add item - add items to machine
+        usage: add item itemName quantity price
+        e.g. add item chips 2 $1.00
+    buy item - buy items
+        usage: buy item itemName dollars quarters dimes nickels pennies
+        e.g. buy item chips 1 2 2 4 3
+    history - show history of transactions
+    exit - exit this interface
+    """)
     return
 
 # Exit the vending machine.
 def exit():
+
+    return
+
+# Calculate the correct change to return to user
+def getChange(cost, paid):
+
+    return
+
+# Calculate how much money was given by user
+def countMoney(dollars=0, quarters=0, dimes=0, nickels=0, pennies=0):
+    return dollars + quarters*.25 + dimes*.1 + nickels*.05 + pennies*.01
+
+# Parse user input to direct program
+def parseInput(command):
 
     return
 
