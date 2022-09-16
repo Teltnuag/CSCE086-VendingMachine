@@ -1,25 +1,48 @@
-balance = 0
+from sys import exit
+
+balance = 0.
 history = {}
 inventory = {}
 
-# Show the balance
-def balance():
+# An item to be bought or added
+class Item:
+    id = 0
+    def __init__(self, name):
+        self.id = Item.id
+        Item.id = Item.id + 1
+        self.name = name
+        self.quantity = 0
+        self.price = 0.0
 
+    def __str__(self):
+        return "ID: " + str(self.id) + "\tName:  " + str(self.name) + "\tQuantity: " + str(self.quantity) + "\tPrice: " + "${:,.2f}".format(self.price)
+
+# Show the balance
+def getBalance():
+    print("Current balance:", balance)
     return
 
 # Prints list of transcations
-def history():
-
+def getHistory():
+    print("Transaction history:")
+    for number, command in history.items():
+        print(str(number) + ". " + command)
     return
 
 # Prints available items with name and ID
-def inventory():
-
+def getInventory():
+    print("Available inventory:")
+    for item in inventory.values():
+        print(item)
     return
 
 # Add an item: name, quantity, price
 def add_item(name, quantity, price):
-
+    if name not in inventory:
+        inventory[name] = Item(name)
+    inventory[name].quantity += quantity
+    inventory[name].price = price
+    print("Item successfully added/updated:", inventory[name])
     return
 
 # Buys an item with # dollars, quarters, dimes, nickles,
@@ -33,23 +56,18 @@ def buy_item(name, dollars, quarters, dimes, nickles, pennies):
 # Displays help menu with these commands.
 def help():
     print("""Available commands:
-    help - display this text
-    balance - show your balance
-    inventory - show iventory of items available
-    add item - add items to machine
+    help - Display this text.
+    balance - Show your balance.
+    inventory - Show the iventory of items available.
+    add item - Add items to the machine. Price will be updated for any current items.
         usage: add item itemName quantity price
         e.g. add item chips 2 $1.00
-    buy item - buy items
+    buy item - Buy a single item from the machine.
         usage: buy item itemName dollars quarters dimes nickels pennies
         e.g. buy item chips 1 2 2 4 3
-    history - show history of transactions
-    exit - exit this interface
+    history - Show the history of commands accepted.
+    exit - Exit this interface and send the machine to the void.
     """)
-    return
-
-# Exit the vending machine.
-def exit():
-
     return
 
 # Calculate the correct change to return to user
@@ -63,13 +81,49 @@ def countMoney(dollars=0, quarters=0, dimes=0, nickels=0, pennies=0):
 
 # Parse user input to direct program
 def parseInput(command):
+    tokens = command.split()
 
-    return
+    return command
 
 # Main command function
-def main():
-    print("Super Vending Machine Activated")
-    return
-
 if __name__ == "__main__":
-    main()
+    print("Super Vending Machine Activated")
+    validCommands = 0
+    while True:
+        validCommand = True
+        command = parseInput(input("> ").lower())
+        tokens = command.split()
+        tokenLength = len(tokens)
+        if tokenLength == 0:
+            continue
+        elif tokenLength == 1:
+            command = tokens[0]
+            if command == "exit":
+                exit()
+            elif command == "history":
+                getHistory()
+            elif command == "balance":
+                getBalance()
+            elif command == "inventory":
+                getInventory()
+            elif command == "help":
+                help()
+            else:
+                validCommand = False
+                print("Unknown command. Enter \"help\" for a list of commands.")
+                continue
+        elif tokens[0] == "add" and tokens[1] == "item":
+            try:
+                assert tokenLength == 5
+                name = tokens[2]
+                quantity = int(tokens[3])
+                price = float(tokens[4].replace('$',''))
+                assert quantity > 0
+                assert price >= 0
+            except:
+                validCommand = False
+                print("Poorly formatted add item. Usage is:\n\tadd item itemName quantity price\n\te.g. add item chips 2 $1.00")
+                continue
+            add_item(name, quantity, price)
+        validCommands = validCommands + 1
+        history[validCommands] = command
