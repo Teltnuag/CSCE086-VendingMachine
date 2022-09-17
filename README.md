@@ -1,3 +1,4 @@
+<pre>
 # CSCE086-VendingMachine
 TSgt Mason Wright
 First assignment for AFIT CSCE-086 refresher course.
@@ -74,3 +75,4 @@ history                     ->  Transaction history:
                                 14. buy item chips 0 0 0 0 0
                                 15. change
 exit
+</pre>
